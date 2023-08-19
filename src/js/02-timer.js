@@ -5,6 +5,7 @@ const hours = document.querySelector('.value[data-hours]');
 const minutes = document.querySelector('.value[data-minutes]');
 const seconds = document.querySelector('.value[data-seconds]');
 const btn = document.querySelector('button');
+
 btn.setAttribute('disabled', 'true');
 let timer = {};
 const options = {
@@ -26,7 +27,12 @@ const options = {
     btn.addEventListener('click', handlerClick);
     function handlerClick() {
       const timerId = setInterval(() => {
-        timer = convertMs((timeDiferrens -= 1000));
+        timeDiferrens -= 1000;
+        if (timeDiferrens < 1000) {
+          clearInterval(timerId);
+        }
+        timer = convertMs(timeDiferrens);
+
         days.textContent = addLeadingZero(timer.days);
         hours.textContent = addLeadingZero(timer.hours);
         minutes.textContent = addLeadingZero(timer.minutes);
@@ -35,7 +41,7 @@ const options = {
     }
   },
 };
-const fp = flatpickr('#datetime-picker', options);
+flatpickr('#datetime-picker', options);
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
