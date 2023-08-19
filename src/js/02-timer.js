@@ -1,13 +1,9 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 const days = document.querySelector('.value[data-days]');
-console.log(days);
 const hours = document.querySelector('.value[data-hours]');
-console.log(hours);
 const minutes = document.querySelector('.value[data-minutes]');
-console.log(minutes);
 const seconds = document.querySelector('.value[data-seconds]');
-console.log(seconds);
 const btn = document.querySelector('button');
 btn.setAttribute('disabled', 'true');
 let timer = {};
@@ -20,30 +16,27 @@ const options = {
     console.log(selectedDates[0]);
     if (selectedDates[0] < new Date()) {
       alert('Please choose a date in the future');
+    } else {
+      btn.removeAttribute('disabled');
     }
-    btn.removeAttribute('disabled');
     const selectTime = selectedDates[0].getTime();
-    console.log(selectTime);
     const currentTime = new Date().getTime();
-    console.log(currentTime);
     let timeDiferrens = selectTime - currentTime;
-    console.log(timeDiferrens);
 
-    console.log(timer);
     btn.addEventListener('click', handlerClick);
     function handlerClick() {
       const timerId = setInterval(() => {
         timer = convertMs((timeDiferrens -= 1000));
-        days.textContent = timer.days;
-        hours.textContent = timer.hours;
-        minutes.textContent = timer.minutes;
-        seconds.textContent = timer.seconds;
+        days.textContent = addLeadingZero(timer.days);
+        hours.textContent = addLeadingZero(timer.hours);
+        minutes.textContent = addLeadingZero(timer.minutes);
+        seconds.textContent = addLeadingZero(timer.seconds);
       }, 1000);
     }
   },
 };
 const fp = flatpickr('#datetime-picker', options);
-console.log(options.defaultDate);
+
 function convertMs(ms) {
   // Number of milliseconds per unit of time
   const second = 1000;
@@ -61,4 +54,7 @@ function convertMs(ms) {
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
+}
+function addLeadingZero(value) {
+  return value.toString().padStart(2, '0');
 }
